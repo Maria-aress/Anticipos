@@ -21,8 +21,11 @@ namespace FacturaScripts\Plugins\Anticipos;
 
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Core\Base\ToolBox;
+use FacturaScripts\Core\Plugins;
 use FacturaScripts\Dinamic\Lib\ExportManager;
 use FacturaScripts\Dinamic\Model\EmailNotification;
+use FacturaScripts\Plugins\Tickets\Controller\SendTicket;
+use FacturaScripts\Dinamic\Model\Anticipo;
 
 /**
  * Description of Init
@@ -60,6 +63,11 @@ class Init extends InitClass
 		
 		$this->loadExtension(new Extension\Model\Base\SalesDocument());
         $this->loadExtension(new Extension\Model\Base\PurchaseDocument());
+
+        // Añadimos soporte del ticket
+        if (Plugins::isEnabled('Tickets')) {
+            SendTicket::addFormat(Anticipo::class, 'Anticipo', 'advance-payment');
+        }
 		
         if (class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
             $this->loadExtension(new Extension\Controller\EditProyecto());
